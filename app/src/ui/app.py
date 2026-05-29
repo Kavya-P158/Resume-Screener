@@ -1,6 +1,11 @@
 import streamlit as st
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 st.title("Resume screening app")
 
 uploaded_file=st.file_uploader("Upload a resume",type="pdf")
@@ -10,7 +15,7 @@ if uploaded_file and jd_file is not None:
     st.write("Files uploaded successfully")
     print("File uploaded successfully",uploaded_file.name)
     if st.button("Process resume"):
-        response=requests.post("http://localhost:8000/processResume",
+        response=requests.post(f"{API_URL}/processResume",
                                files={"resume":uploaded_file,"jd":jd_file})
         if(response.status_code==200):
             response_data=response.json()
